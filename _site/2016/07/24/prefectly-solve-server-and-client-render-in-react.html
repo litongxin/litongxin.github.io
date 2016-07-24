@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Perfectly solve server and client render in React</title>
+  <meta name="description" content="ReactJS stands out from a heap of front-end JavaScript frameworks, which dues to its one-way data binding and reactive data flow.">
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:600' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://litongxin.github.io/2016/07/24/prefectly-solve-server-and-client-render-in-react.html">
+  <link rel="alternate" type="application/rss+xml" title="Momo's Space" href="http://litongxin.github.io/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Momo's Space</a>
+
+    <nav class="site-nav">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Perfectly solve server and client render in React</h1>
+    <p class="post-meta">Jul 24, 2016</p>
+  </header>
+
+  <article class="post-content">
+    <p>ReactJS stands out from a heap of front-end JavaScript frameworks, which dues to its one-way data binding and reactive data flow.</p>
+
+<p>In order to reuse processing logic in both server and client side, we use express for backend, which is a minimal and flexible Node.js web application framework.</p>
+
+<p>So the puzzle comes in: <code class="highlighter-rouge">How to handle render in both sides for multiple request</code></p>
+
+<h4 id="brief-glance">Brief Glance</h4>
+<p>Choose <a href="https://github.com/reactjs/react-router">React Router</a> for dynamic route matching, separate react component into two types: 
+container component and view component, introduce a handler layer mechanism.</p>
+
+<p>Further explanation: Container component is a smart component which knows how to fetch data it needs and operate the puppet ones (view component).</p>
+
+<h4 id="going-deep">Going Deep</h4>
+<ul>
+  <li>Route matching</li>
+</ul>
+
+<p>After look into <a href="https://github.com/reactjs/react-router/tree/1.0.x/docs">React Router docs</a>, we can build Nesting logic in Routes.js.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span>default <span class="o">(</span>
+  &lt;Route <span class="nv">path</span><span class="o">=</span><span class="s2">"/"</span> <span class="nv">name</span><span class="o">=</span><span class="s2">"app"</span> <span class="nv">component</span><span class="o">={</span>App<span class="o">}</span>&gt;
+    &lt;Route <span class="nv">path</span><span class="o">=</span><span class="s2">"landing-page"</span> <span class="nv">name</span><span class="o">=</span><span class="s2">"landingPage"</span> <span class="nv">component</span><span class="o">={</span>LandingPage<span class="o">}</span>/&gt;
+    &lt;Route <span class="nv">path</span><span class="o">=</span><span class="s2">"other-page"</span> <span class="nv">name</span><span class="o">=</span><span class="s2">"otherPage"</span> <span class="nv">component</span><span class="o">={</span>OtherPage<span class="o">}</span>/&gt;
+  &lt;/Route&gt;
+<span class="o">)</span>;</code></pre></figure>
+
+<ul>
+  <li>Handler layer definition</li>
+</ul>
+
+<p><strong>Firstly</strong> consider every container component(e.g LandingPage) will render one page content, so define static method <code class="highlighter-rouge">fetchApiData</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">  static fetchApiData<span class="o">(</span>host<span class="o">)</span> <span class="o">{</span>
+    try <span class="o">{</span>
+      const bffApi <span class="o">=</span> new BffApi<span class="o">(</span>host<span class="o">)</span>;
+      <span class="k">return </span>bffApi.getUser<span class="o">()</span>.then<span class="o">(</span>d <span class="o">=</span>&gt; <span class="o">{</span>
+          <span class="k">return</span> <span class="o">{</span>user: d<span class="o">}</span>;
+        <span class="o">}</span>
+      <span class="o">)</span>;
+    <span class="o">}</span>
+    catch <span class="o">(</span>e<span class="o">)</span> <span class="o">{</span>
+      <span class="k">return </span>when.reject<span class="o">(</span>e<span class="o">)</span>;
+    <span class="o">}</span>
+  <span class="o">}</span></code></pre></figure>
+
+<p><strong>Secondly</strong> build the matching logic for both sides, here we introduce <code class="highlighter-rouge">fetchApiData util</code> to help us, 
+filter the component and return its own <code class="highlighter-rouge">fetchApiData</code> result after calling.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">import when from <span class="s1">'when'</span>;
+
+<span class="nb">export </span>default <span class="k">function</span> <span class="o">(</span>renderProps, host<span class="o">)</span> <span class="o">{</span>
+  <span class="nb">let </span>data <span class="o">=</span> <span class="o">{}</span>;
+
+  const filteredRoutes <span class="o">=</span> renderProps.routes.filter<span class="o">(</span>route <span class="o">=</span>&gt; route.component<span class="o">)</span>
+    .filter<span class="o">(</span>route <span class="o">=</span>&gt; route.component.fetchApiData<span class="o">)</span>;
+
+  <span class="k">return </span>when.Promise.all<span class="o">(</span>
+    filteredRoutes.map<span class="o">(</span>route <span class="o">=</span>&gt; <span class="o">{</span>
+      <span class="k">return </span>route.component.fetchApiData<span class="o">(</span>renderProps, host<span class="o">)</span>.then<span class="o">(</span>d <span class="o">=</span>&gt; <span class="o">{</span>
+        data <span class="o">=</span> d;
+      <span class="o">})</span>;
+    <span class="o">})</span>
+  <span class="o">)</span>.timeout<span class="o">(</span>10000<span class="o">)</span>.then<span class="o">(()</span> <span class="o">=</span>&gt; data<span class="o">)</span>;
+<span class="o">}</span></code></pre></figure>
+
+<p>After having this beautiful util, magic time shows.</p>
+
+<p>In server side render:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">import routes from <span class="s1">'./Routes'</span>;
+import fetchApiData from <span class="s2">"./fetchApiData"</span>;
+
+app.all<span class="o">(</span><span class="s1">'/*'</span>, <span class="o">(</span>req, res<span class="o">)</span> <span class="o">=</span>&gt; <span class="o">{</span>
+  match<span class="o">({</span>routes: routes, location: req.url<span class="o">}</span>, async <span class="k">function</span> <span class="o">(</span>error, redirectLocation, renderProps<span class="o">)</span> <span class="o">{</span>
+    logger.info<span class="o">(</span><span class="s2">"Request headers hostname: "</span> + req.headers.host<span class="o">)</span>;
+    fetchApiData<span class="o">(</span>renderProps, bffHost<span class="o">)</span>
+      .then<span class="o">(</span>apiData <span class="o">=</span>&gt; <span class="o">{</span>
+          <span class="k">if</span> <span class="o">(</span>error<span class="o">)</span> <span class="o">{</span>
+            logger.error<span class="o">(</span>error<span class="o">)</span>;
+            res.status<span class="o">(</span>500<span class="o">)</span>.send<span class="o">(</span>error<span class="o">)</span>;
+          <span class="o">}</span> <span class="k">else if</span> <span class="o">(</span>redirectLocation<span class="o">)</span> <span class="o">{</span>
+            res.redirect<span class="o">(</span>302, redirectLocation.pathname + redirectLocation.search<span class="o">)</span>;
+          <span class="o">}</span> <span class="k">else if</span> <span class="o">(</span>renderProps<span class="o">)</span> <span class="o">{</span>
+            apiData.status <span class="o">=</span> 200;
+            renderProps.params.apiData <span class="o">=</span> apiData;
+            const context <span class="o">=</span> &lt;RoutingContext <span class="o">{</span>...renderProps<span class="o">}</span>/&gt;;
+            const renderResult <span class="o">=</span> <span class="s1">'&lt;!DOCTYPE html&gt;'</span> + renderToString<span class="o">(</span>context<span class="o">)</span>;
+            res.status<span class="o">(</span>200<span class="o">)</span>.send<span class="o">(</span>html<span class="o">)</span>;
+          <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            res.status<span class="o">(</span>404<span class="o">)</span>.send<span class="o">(</span><span class="s1">'Not found'</span><span class="o">)</span>;
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="o">)</span>;
+  <span class="o">})</span>;
+<span class="o">})</span>;</code></pre></figure>
+
+<p>In client side render:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">import <span class="o">{</span>createHistory, useBasename<span class="o">}</span> from <span class="s1">'history'</span>;
+import routes from <span class="s1">'./Routes'</span>;
+import fetchApiData from <span class="s2">"./fetchApiData"</span>;
+
+const <span class="nb">history</span> <span class="o">=</span> useBasename<span class="o">(</span>createHistory<span class="o">)({</span>basename: <span class="s1">''</span><span class="o">})</span>;
+const pageData <span class="o">=</span> window.pageData;
+
+<span class="k">function </span>matchLocation<span class="o">(</span>location<span class="o">)</span> <span class="o">{</span>
+  match<span class="o">({</span>routes, location<span class="o">}</span>, <span class="o">(</span>error, redirectLocation, renderProps<span class="o">)</span> <span class="o">=</span>&gt; <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span>pageData <span class="o">&amp;&amp;</span> !_.isEmpty<span class="o">(</span>pageData<span class="o">))</span> <span class="o">{</span>
+      const data <span class="o">=</span> pageData;
+      <span class="nb">let </span>component;
+      <span class="k">if</span> <span class="o">(</span>data.status <span class="o">==</span> 200<span class="o">)</span> <span class="o">{</span>
+        renderProps.params.apiData <span class="o">=</span> pageData;
+        component <span class="o">=</span> &lt;RoutingContext <span class="o">{</span>...renderProps<span class="o">}</span> <span class="nb">history</span><span class="o">={</span><span class="nb">history</span><span class="o">}</span>/&gt;;
+        render<span class="o">(</span>component, document<span class="o">)</span>;
+      <span class="o">}</span> 
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      fetchApiData<span class="o">(</span>renderProps, bffHost<span class="o">)</span>
+        .then<span class="o">(</span>apiData <span class="o">=</span>&gt; <span class="o">{</span>
+            apiData.status <span class="o">=</span> 200;
+            renderProps.params.apiData <span class="o">=</span> apiData;
+            <span class="nb">let </span>component <span class="o">=</span> &lt;RoutingContext <span class="o">{</span>...renderProps<span class="o">}</span> <span class="nb">history</span><span class="o">={</span><span class="nb">history</span><span class="o">}</span>/&gt;;
+            render<span class="o">(</span>component, document<span class="o">)</span>;
+          <span class="o">}</span>
+        <span class="o">)</span>;
+    <span class="o">}</span>
+    
+  <span class="o">})</span>;
+<span class="o">}</span>
+
+history.listen<span class="o">(</span>matchLocation<span class="o">)</span>;</code></pre></figure>
+
+<p>Client side render, in order to prevent fetchApiData method call again if already got in server side, 
+our window has the pageData attribute. If pageData exists, just use the data to render whole page. If not, 
+client side will use the same logic to fetch api data.</p>
+
+<p><strong>Thirdly</strong> extract shared DOM structure, put them into Root Component(e.g App). Also in server sides render code 
+(<code class="highlighter-rouge">'&lt;!DOCTYPE html&gt;' + renderToString(context);</code>), directly return whole html instead of define index.html.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">import React from <span class="s1">'react'</span>;
+import Header from <span class="s1">'./shared/Header'</span>;
+import Footer from <span class="s1">'./shared/Footer'</span>;
+
+<span class="nb">export </span>default class App extends React.Component <span class="o">{</span>
+
+  render<span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span>
+      &lt;html <span class="nv">lang</span><span class="o">=</span><span class="s2">"en"</span>&gt;
+      &lt;head&gt;
+        &lt;link <span class="nv">rel</span><span class="o">=</span><span class="s2">"stylesheet"</span> <span class="nv">href</span><span class="o">=</span><span class="s2">"/assets/css/main.css"</span>/&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+      &lt;Header/&gt;
+      <span class="o">{</span>React.cloneElement<span class="o">(</span>this.props.children, <span class="o">{</span>...this.props<span class="o">})}</span>
+      &lt;Footer/&gt;
+      &lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">"text/javascript"</span> <span class="nv">src</span><span class="o">=</span><span class="s2">"/assets/js/vendor.js"</span><span class="o">}</span>&gt;&lt;/script&gt;
+      &lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">"text/javascript"</span> <span class="nv">src</span><span class="o">=</span><span class="s2">"/assets/js/main.js"</span><span class="o">}</span>&gt;&lt;/script&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    <span class="o">)</span>;
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>Seo requirement</li>
+</ul>
+
+<p>Different page has different meta data in head tag, which meets seo requirement. 
+In order to do that, additional static method is needed for container component.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">static prepareMetadata<span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span>
+       &lt;meta <span class="nv">name</span><span class="o">=</span><span class="s2">"description"</span> <span class="nv">content</span><span class="o">=</span><span class="s2">"Page description"</span>/&gt;
+       &lt;meta <span class="nv">rel</span><span class="o">=</span><span class="s2">"canonical"</span> <span class="nv">href</span><span class="o">=</span><span class="s2">"http://www.example.com/"</span>/&gt;
+    <span class="o">)</span>;
+  <span class="o">}</span></code></pre></figure>
+
+<p>Also <code class="highlighter-rouge">prepareMetadata util</code> is needed.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span>default <span class="k">function</span> <span class="o">(</span>renderProps<span class="o">)</span> <span class="o">{</span>
+  <span class="nb">let </span>data <span class="o">=</span> <span class="o">{}</span>;
+
+  const filteredRoutes <span class="o">=</span> renderProps.routes.filter<span class="o">(</span>route <span class="o">=</span>&gt; route.component<span class="o">)</span>
+    .filter<span class="o">(</span>route <span class="o">=</span>&gt; route.component.prepareMetadata<span class="o">)</span>;
+
+  filteredRoutes.map<span class="o">(</span>route <span class="o">=</span>&gt;
+    data <span class="o">=</span> route.component.prepareMetadata<span class="o">(</span>renderProps<span class="o">)</span>
+  <span class="o">)</span>;
+
+  <span class="k">return </span>data;
+<span class="o">}</span></code></pre></figure>
+
+<p>If more complex seo requirement comes, for example, need to generate meta data according to different api result, 
+current implementation can easily expand, just change the render logic like the following, use server side as example:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">app.all<span class="o">(</span><span class="s1">'/*'</span>, <span class="o">(</span>req, res<span class="o">)</span> <span class="o">=</span>&gt; <span class="o">{</span>
+  match<span class="o">({</span>routes: routes, location: req.url<span class="o">}</span>, async <span class="k">function</span> <span class="o">(</span>error, redirectLocation, renderProps<span class="o">)</span> <span class="o">{</span>
+    logger.info<span class="o">(</span><span class="s2">"Request headers hostname: "</span> + req.headers.host<span class="o">)</span>;
+    fetchApiData<span class="o">(</span>renderProps, bffHost<span class="o">)</span>
+      .then<span class="o">(</span>apiData <span class="o">=</span>&gt; <span class="o">{</span>
+            ...
+            apiData.status <span class="o">=</span> 200;
+            renderProps.params.apiData <span class="o">=</span> apiData;
+            renderProps.params.metaData <span class="o">=</span> prepareMetaData<span class="o">(</span>renderProps, apiData<span class="o">)</span>;
+            const context <span class="o">=</span> &lt;RoutingContext <span class="o">{</span>...renderProps<span class="o">}</span>/&gt;;
+            ...
+          <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            res.status<span class="o">(</span>404<span class="o">)</span>.send<span class="o">(</span><span class="s1">'Not found'</span><span class="o">)</span>;
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="o">)</span>;
+  <span class="o">})</span>;
+<span class="o">})</span>;</code></pre></figure>
+
+<p>Call the prepareMetaData and pass api data as parameters, stuff metaData DOM as renderProps.params attribute, then you can use the metaData in App component.</p>
+
+<ul>
+  <li>Configuration management</li>
+</ul>
+
+<p>For configuration, make sure both sides can use, and the difficult part is: <code class="highlighter-rouge">How client side get configuration</code>.</p>
+
+<p>Two ways:<br />
+1) For server side, define global variables. For client side, replace special words in index.html, add extra attribute for window.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&lt;script&gt;
+  var PAGE <span class="o">=</span> PAGE ? PAGE : <span class="o">{}</span>;
+  PAGE.api_endpoint <span class="o">=</span> <span class="s1">'¡APIENDPOINT!'</span>;
+  PAGE.api_key <span class="o">=</span> <span class="s1">'¡APIKEY!'</span>;
+&lt;/script&gt;</code></pre></figure>
+
+<p>2) For server side read configuration file. For client side, let server side pass configuration as renderProps.params attribute into App component, then insert script.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">import config from <span class="s1">'./util/configManager'</span>;
+const configuration <span class="o">=</span> config.generateConfigurationForBrowser<span class="o">()</span>;
+renderProps.params.configuration <span class="o">=</span> configuration;
+......
+<span class="k">function </span>insertAttribute<span class="o">()</span> <span class="o">{</span> 
+  <span class="k">return</span> <span class="o">{</span>
+  __html: <span class="sb">`</span>window.configurationFromNode <span class="o">=</span> <span class="k">${</span><span class="nv">JSON</span><span class="p">.stringify(this.props.params.configuration)</span><span class="k">}</span>;
+           window.pageData <span class="o">=</span> <span class="k">${</span><span class="nv">JSON</span><span class="p">.stringify(this.props.params.apiData)</span><span class="k">}</span>;<span class="sb">`</span>
+  <span class="o">}</span>; 
+<span class="o">}</span>;
+&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">"text/javascript"</span>
+              <span class="nv">dangerouslySetInnerHTML</span><span class="o">={</span>insertAttribute<span class="o">()}</span> &gt;&lt;/script&gt;</code></pre></figure>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+  </body>
+
+</html>

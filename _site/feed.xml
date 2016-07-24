@@ -6,9 +6,264 @@
 </description>
     <link>http://litongxin.github.io/</link>
     <atom:link href="http://litongxin.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 24 Jul 2016 19:21:04 +0800</pubDate>
-    <lastBuildDate>Sun, 24 Jul 2016 19:21:04 +0800</lastBuildDate>
+    <pubDate>Sun, 24 Jul 2016 23:06:18 +0800</pubDate>
+    <lastBuildDate>Sun, 24 Jul 2016 23:06:18 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Perfectly solve server and client render in React</title>
+        <description>&lt;p&gt;ReactJS stands out from a heap of front-end JavaScript frameworks, which dues to its one-way data binding and reactive data flow.&lt;/p&gt;
+
+&lt;p&gt;In order to reuse processing logic in both server and client side, we use express for backend, which is a minimal and flexible Node.js web application framework.&lt;/p&gt;
+
+&lt;p&gt;So the puzzle comes in: &lt;code class=&quot;highlighter-rouge&quot;&gt;How to handle render in both sides for multiple request&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;brief-glance&quot;&gt;Brief Glance&lt;/h4&gt;
+&lt;p&gt;Choose &lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;React Router&lt;/a&gt; for dynamic route matching, separate react component into two types: 
+container component and view component, introduce a handler layer mechanism.&lt;/p&gt;
+
+&lt;p&gt;Further explanation: Container component is a smart component which knows how to fetch data it needs and operate the puppet ones (view component).&lt;/p&gt;
+
+&lt;h4 id=&quot;going-deep&quot;&gt;Going Deep&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;Route matching&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After look into &lt;a href=&quot;https://github.com/reactjs/react-router/tree/1.0.x/docs&quot;&gt;React Router docs&lt;/a&gt;, we can build Nesting logic in Routes.js.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;default &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+  &amp;lt;Route &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;app&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;App&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&amp;gt;
+    &amp;lt;Route &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;landing-page&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;landingPage&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;LandingPage&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/&amp;gt;
+    &amp;lt;Route &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;other-page&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;otherPage&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;OtherPage&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/&amp;gt;
+  &amp;lt;/Route&amp;gt;
+&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Handler layer definition&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Firstly&lt;/strong&gt; consider every container component(e.g LandingPage) will render one page content, so define static method &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchApiData&lt;/code&gt;.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  static fetchApiData&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;host&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    try &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      const bffApi &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; new BffApi&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;host&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+      &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;bffApi.getUser&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;.then&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;d &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;user: d&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    catch &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;when.reject&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;Secondly&lt;/strong&gt; build the matching logic for both sides, here we introduce &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchApiData util&lt;/code&gt; to help us, 
+filter the component and return its own &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchApiData&lt;/code&gt; result after calling.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;import when from &lt;span class=&quot;s1&quot;&gt;&#39;when&#39;&lt;/span&gt;;
+
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;default &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps, host&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;;
+
+  const filteredRoutes &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; renderProps.routes.filter&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;route &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; route.component&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    .filter&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;route &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; route.component.fetchApiData&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+
+  &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;when.Promise.all&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    filteredRoutes.map&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;route &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;route.component.fetchApiData&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps, host&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.then&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;d &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; d;
+      &lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;
+    &lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.timeout&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10000&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.then&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; data&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;After having this beautiful util, magic time shows.&lt;/p&gt;
+
+&lt;p&gt;In server side render:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;import routes from &lt;span class=&quot;s1&quot;&gt;&#39;./Routes&#39;&lt;/span&gt;;
+import fetchApiData from &lt;span class=&quot;s2&quot;&gt;&quot;./fetchApiData&quot;&lt;/span&gt;;
+
+app.all&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/*&#39;&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;req, res&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  match&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;routes: routes, location: req.url&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, async &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;error, redirectLocation, renderProps&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    logger.info&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Request headers hostname: &quot;&lt;/span&gt; + req.headers.host&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+    fetchApiData&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps, bffHost&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      .then&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            logger.error&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+            res.status&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;500&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.send&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;error&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;redirectLocation&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            res.redirect&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;302, redirectLocation.pathname + redirectLocation.search&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            apiData.status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 200;
+            renderProps.params.apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; apiData;
+            const context &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &amp;lt;RoutingContext &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;...renderProps&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/&amp;gt;;
+            const renderResult &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;!DOCTYPE html&amp;gt;&#39;&lt;/span&gt; + renderToString&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+            res.status&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.send&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;html&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            res.status&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;404&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.send&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Not found&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+  &lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;
+&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;In client side render:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;import &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;createHistory, useBasename&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; from &lt;span class=&quot;s1&quot;&gt;&#39;history&#39;&lt;/span&gt;;
+import routes from &lt;span class=&quot;s1&quot;&gt;&#39;./Routes&#39;&lt;/span&gt;;
+import fetchApiData from &lt;span class=&quot;s2&quot;&gt;&quot;./fetchApiData&quot;&lt;/span&gt;;
+
+const &lt;span class=&quot;nb&quot;&gt;history&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; useBasename&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;createHistory&lt;span class=&quot;o&quot;&gt;)({&lt;/span&gt;basename: &lt;span class=&quot;s1&quot;&gt;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;
+const pageData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; window.pageData;
+
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;matchLocation&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;location&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  match&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;routes, location&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;error, redirectLocation, renderProps&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;pageData &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; !_.isEmpty&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;pageData&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      const data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; pageData;
+      &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;component;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;data.status &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        renderProps.params.apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; pageData;
+        component &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &amp;lt;RoutingContext &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;...renderProps&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;history&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;history&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/&amp;gt;;
+        render&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;component, document&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      fetchApiData&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps, bffHost&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        .then&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            apiData.status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 200;
+            renderProps.params.apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; apiData;
+            &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;component &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &amp;lt;RoutingContext &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;...renderProps&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;history&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;history&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/&amp;gt;;
+            render&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;component, document&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    
+  &lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+history.listen&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;matchLocation&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Client side render, in order to prevent fetchApiData method call again if already got in server side, 
+our window has the pageData attribute. If pageData exists, just use the data to render whole page. If not, 
+client side will use the same logic to fetch api data.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Thirdly&lt;/strong&gt; extract shared DOM structure, put them into Root Component(e.g App). Also in server sides render code 
+(&lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;&amp;lt;!DOCTYPE html&amp;gt;&#39; + renderToString(context);&lt;/code&gt;), directly return whole html instead of define index.html.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;import React from &lt;span class=&quot;s1&quot;&gt;&#39;react&#39;&lt;/span&gt;;
+import Header from &lt;span class=&quot;s1&quot;&gt;&#39;./shared/Header&#39;&lt;/span&gt;;
+import Footer from &lt;span class=&quot;s1&quot;&gt;&#39;./shared/Footer&#39;&lt;/span&gt;;
+
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;default class App extends React.Component &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+  render&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+      &amp;lt;html &lt;span class=&quot;nv&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;en&quot;&lt;/span&gt;&amp;gt;
+      &amp;lt;head&amp;gt;
+        &amp;lt;link &lt;span class=&quot;nv&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/assets/css/main.css&quot;&lt;/span&gt;/&amp;gt;
+      &amp;lt;/head&amp;gt;
+      &amp;lt;body&amp;gt;
+      &amp;lt;Header/&amp;gt;
+      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;React.cloneElement&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;this.props.children, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;...this.props&lt;span class=&quot;o&quot;&gt;})}&lt;/span&gt;
+      &amp;lt;Footer/&amp;gt;
+      &amp;lt;script &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/assets/js/vendor.js&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&amp;gt;&amp;lt;/script&amp;gt;
+      &amp;lt;script &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/assets/js/main.js&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&amp;gt;&amp;lt;/script&amp;gt;
+      &amp;lt;/body&amp;gt;
+      &amp;lt;/html&amp;gt;
+    &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Seo requirement&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Different page has different meta data in head tag, which meets seo requirement. 
+In order to do that, additional static method is needed for container component.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;static prepareMetadata&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+       &amp;lt;meta &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;description&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Page description&quot;&lt;/span&gt;/&amp;gt;
+       &amp;lt;meta &lt;span class=&quot;nv&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;canonical&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.example.com/&quot;&lt;/span&gt;/&amp;gt;
+    &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Also &lt;code class=&quot;highlighter-rouge&quot;&gt;prepareMetadata util&lt;/code&gt; is needed.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;default &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;;
+
+  const filteredRoutes &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; renderProps.routes.filter&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;route &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; route.component&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    .filter&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;route &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; route.component.prepareMetadata&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+
+  filteredRoutes.map&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;route &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt;
+    data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; route.component.prepareMetadata&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+
+  &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;data;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If more complex seo requirement comes, for example, need to generate meta data according to different api result, 
+current implementation can easily expand, just change the render logic like the following, use server side as example:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;app.all&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/*&#39;&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;req, res&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  match&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;routes: routes, location: req.url&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, async &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;error, redirectLocation, renderProps&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    logger.info&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Request headers hostname: &quot;&lt;/span&gt; + req.headers.host&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+    fetchApiData&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps, bffHost&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      .then&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            ...
+            apiData.status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 200;
+            renderProps.params.apiData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; apiData;
+            renderProps.params.metaData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; prepareMetaData&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;renderProps, apiData&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+            const context &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &amp;lt;RoutingContext &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;...renderProps&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/&amp;gt;;
+            ...
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            res.status&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;404&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.send&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Not found&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+  &lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;
+&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Call the prepareMetaData and pass api data as parameters, stuff metaData DOM as renderProps.params attribute, then you can use the metaData in App component.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Configuration management&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For configuration, make sure both sides can use, and the difficult part is: &lt;code class=&quot;highlighter-rouge&quot;&gt;How client side get configuration&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Two ways:&lt;br /&gt;
+1) For server side, define global variables. For client side, replace special words in index.html, add extra attribute for window.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&amp;lt;script&amp;gt;
+  var PAGE &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; PAGE ? PAGE : &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;;
+  PAGE.api_endpoint &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;¡APIENDPOINT!&#39;&lt;/span&gt;;
+  PAGE.api_key &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;¡APIKEY!&#39;&lt;/span&gt;;
+&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;2) For server side read configuration file. For client side, let server side pass configuration as renderProps.params attribute into App component, then insert script.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;import config from &lt;span class=&quot;s1&quot;&gt;&#39;./util/configManager&#39;&lt;/span&gt;;
+const configuration &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; config.generateConfigurationForBrowser&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;;
+renderProps.params.configuration &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; configuration;
+......
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;insertAttribute&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  __html: &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;window.configurationFromNode &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.stringify(this.props.params.configuration)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;;
+           window.pageData &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.stringify(this.props.params.apiData)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;; 
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;;
+&amp;lt;script &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;
+              &lt;span class=&quot;nv&quot;&gt;dangerouslySetInnerHTML&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;insertAttribute&lt;span class=&quot;o&quot;&gt;()}&lt;/span&gt; &amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+</description>
+        <pubDate>Sun, 24 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://litongxin.github.io/2016/07/24/prefectly-solve-server-and-client-render-in-react.html</link>
+        <guid isPermaLink="true">http://litongxin.github.io/2016/07/24/prefectly-solve-server-and-client-render-in-react.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>How to use gatling to do performance test</title>
@@ -50,8 +305,7 @@
 &lt;ul&gt;
   &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;sbt update&lt;/code&gt; to download dependencies plugins&lt;/li&gt;
   &lt;li&gt;Put your com.myapplication package which contains demoSimulation.scala file to &lt;code class=&quot;highlighter-rouge&quot;&gt;/scala&lt;/code&gt; directory.&lt;/li&gt;
-  &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;sbt test&lt;/code&gt; to run gatling test and generate report into
-&lt;code class=&quot;highlighter-rouge&quot;&gt;/target/gatling&lt;/code&gt; directory.&lt;/li&gt;
+  &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;sbt test&lt;/code&gt; to run gatling test and generate report into &lt;code class=&quot;highlighter-rouge&quot;&gt;/target/gatling&lt;/code&gt; directory.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Note: I change the concurrency number from 1 to 50 demoSimulation.scala file, here is the Screenshot for report.
@@ -112,7 +366,7 @@ But you still need to write the trigger JS file. The polyfill’s README just su
 
 &lt;h4 id=&quot;installation&quot;&gt;Installation&lt;/h4&gt;
 &lt;p&gt;If you think only run &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install mongodb&lt;/code&gt;, you are totally wrong.&lt;br /&gt;
-  The &lt;strong&gt;biscuit&lt;/strong&gt; thing is setting up dbpath for it. It took me almost 20 mins to make it work and start mongodb’s server!!!&lt;/p&gt;
+The &lt;strong&gt;biscuit&lt;/strong&gt; thing is setting up dbpath for it. It took me almost 20 mins to make it work and start mongodb’s server!!!&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo mkdir -p /data/db  
 sudo chmod 0755 /data/db
@@ -120,8 +374,8 @@ sudo chown &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;userName&lt;span class=
 
 &lt;h4 id=&quot;log-tracker&quot;&gt;Log tracker&lt;/h4&gt;
 &lt;p&gt;Using mongojs for nodejs and mongodb integration, the mongojs module is easy to use for CRUD operations.&lt;br /&gt;
-  The &lt;strong&gt;biscuit&lt;/strong&gt; thing is that mongodb server log cheat me!!! When I insert one message for one collection first time, the logger print out. Then I insert some, it shows nothing. So I am trying to figure out why I can’t insert successfully. It tooks me 1 hour to check my code and google the reason.&lt;br /&gt;
-  Finally, I run &lt;code class=&quot;highlighter-rouge&quot;&gt;db.{collection_name}.findOne(key:value)&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;db.{collection_name}.find()&lt;/code&gt;, all message are saved without any logger!!! T.T&lt;/p&gt;
+The &lt;strong&gt;biscuit&lt;/strong&gt; thing is that mongodb server log cheat me!!! When I insert one message for one collection first time, the logger print out. Then I insert some, it shows nothing. So I am trying to figure out why I can’t insert successfully. It tooks me 1 hour to check my code and google the reason.&lt;br /&gt;
+Finally, I run &lt;code class=&quot;highlighter-rouge&quot;&gt;db.{collection_name}.findOne(key:value)&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;db.{collection_name}.find()&lt;/code&gt;, all message are saved without any logger!!! T.T&lt;/p&gt;
 
 &lt;h4 id=&quot;basic-usage&quot;&gt;Basic Usage&lt;/h4&gt;
 &lt;p&gt;Start mongdb server: &lt;code class=&quot;highlighter-rouge&quot;&gt;mongod&lt;/code&gt;&lt;br /&gt;
