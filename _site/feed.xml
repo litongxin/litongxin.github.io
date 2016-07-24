@@ -1,70 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Clean</title>
-    <description>Write an awesome description for your new site here. You can edit this line in _config.yml.
+    <title>Momo&#39;s Space</title>
+    <description>Hey...Ho...Let&#39;s go...
 </description>
-    <link>http://yourdomain.com/clean/</link>
-    <atom:link href="http://yourdomain.com/clean/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 24 Jul 2016 17:35:49 +0800</pubDate>
-    <lastBuildDate>Sun, 24 Jul 2016 17:35:49 +0800</lastBuildDate>
+    <link>http://litongxin.github.io/</link>
+    <atom:link href="http://litongxin.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 24 Jul 2016 19:21:04 +0800</pubDate>
+    <lastBuildDate>Sun, 24 Jul 2016 19:21:04 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
-        <title>A Clean Jekyll theme</title>
-        <description>&lt;p&gt;##Subheading
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at mauris ante. Cras sit amet porta quam. Donec eu gravida elit. Sed a diam eget sem lacinia maximus vel et elit. Nullam id egestas nulla. Duis dapibus at quam eu dapibus. Maecenas ullamcorper placerat eros, eu posuere enim bibendum eget. Phasellus mollis enim molestie tortor aliquam, nec auctor ligula &lt;code class=&quot;highlighter-rouge&quot;&gt;fringilla&lt;/code&gt;.&lt;/p&gt;
+        <title>How to use gatling to do performance test</title>
+        <description>&lt;p&gt;If you want to make your website more attractive, you need elegant design, comfortable font, following user habits, of course a certain number of pictures is essential. When the number of pictures increases, you need to consider the response and performance of your site.&lt;/p&gt;
 
-&lt;p&gt;##Sample Code&lt;/p&gt;
+&lt;p&gt;When we need to do performance test, gatling, a lightweight DSL written in Scala, can be a good choice. Simply to say, gatling’s principle is:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-go&quot; data-lang=&quot;go&quot;&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;ul&gt;
+  &lt;li&gt;divided into specific scenarios&lt;/li&gt;
+  &lt;li&gt;defined simulation which includes scenario&lt;/li&gt;
+  &lt;li&gt;run each simulation&lt;/li&gt;
+  &lt;li&gt;generate a graphical report&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;net/http&quot;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;h4 id=&quot;simulation-demo&quot;&gt;Simulation Demo:&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;/asset/images/simulation-demo.png&quot; width=&quot;550px&quot; alt=&quot;Simulation Demo&quot; /&gt;&lt;/p&gt;
 
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rw&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ResponseWriter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rw&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([]&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hello world.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;p&gt;After briefly introducing gatling, in order to develop faster and more convenient, we use the sbt build tool and ready-made plug-ins called io.gatling and gatling-sbt.&lt;/p&gt;
 
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HandleFunc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ListenAndServe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;:3000&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h4 id=&quot;implementation-with-sbt&quot;&gt;Implementation with sbt&lt;/h4&gt;
+&lt;p&gt;The directory structure in my local machine as follows :&lt;/p&gt;
 
-&lt;p&gt;##List 
-- Do this
-- Do that
-- Bla Bla Bla
-- Go to Sleep&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/asset/images/directory-structure.png&quot; width=&quot;200px&quot; alt=&quot;Directory Structure&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;##Links
-&lt;a href=&quot;http://example.net/&quot;&gt;This link&lt;/a&gt; has no title attribute.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;build.properties&lt;/code&gt; -  specify sbt version&lt;/p&gt;
 
+&lt;p&gt;&lt;img src=&quot;/asset/images/build-properties.png&quot; width=&quot;200px&quot; alt=&quot;build.properties&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;plugins.sbt&lt;/code&gt; - define plug-ins and its versions&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/asset/images/plugins-sbt.png&quot; width=&quot;400px&quot; alt=&quot;plugins.sbt&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;build.sbt&lt;/code&gt; -  build definition file, which defines the library dependencies&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/asset/images/build-sbt.png&quot; width=&quot;800px&quot; alt=&quot;build.sbt&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;run-performance-test&quot;&gt;Run performance test&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;sbt update&lt;/code&gt; to download dependencies plugins&lt;/li&gt;
+  &lt;li&gt;Put your com.myapplication package which contains demoSimulation.scala file to &lt;code class=&quot;highlighter-rouge&quot;&gt;/scala&lt;/code&gt; directory.&lt;/li&gt;
+  &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;sbt test&lt;/code&gt; to run gatling test and generate report into
+&lt;code class=&quot;highlighter-rouge&quot;&gt;/target/gatling&lt;/code&gt; directory.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Note: I change the concurrency number from 1 to 50 demoSimulation.scala file, here is the Screenshot for report.
+&lt;img src=&quot;/asset/images/gatling-report.png&quot; width=&quot;800px&quot; alt=&quot;build.sbt&quot; /&gt;&lt;/p&gt;
 </description>
-        <pubDate>Sun, 27 Sep 2015 02:51:59 +0800</pubDate>
-        <link>http://yourdomain.com/clean/jekyll/update/2015/09/27/clean-theme.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/clean/jekyll/update/2015/09/27/clean-theme.html</guid>
+        <pubDate>Fri, 14 Aug 2015 00:00:00 +0800</pubDate>
+        <link>http://litongxin.github.io/2015/08/14/how-to-use-gatling-to-do-performance-test.html</link>
+        <guid isPermaLink="true">http://litongxin.github.io/2015/08/14/how-to-use-gatling-to-do-performance-test.html</guid>
         
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
         
       </item>
     
       <item>
-        <title>Hello</title>
-        <description>&lt;p&gt;Hello Jekyll&lt;/p&gt;
+        <title>CSS3 property: object-fit and its polyfill</title>
+        <description>&lt;p&gt;Object-fit is a new CSS3 property which aims to control the aspect ratio of  replaced elements like img/video during screen resizing.&lt;/p&gt;
+
+&lt;h4 id=&quot;basic-introduction&quot;&gt;Basic Introduction&lt;/h4&gt;
+&lt;p&gt;Method of specifying how an object (image or video) should fit inside its box. object-fit options include “contain” (fit according to aspect ratio), “fill” (stretches object to fill) and “cover” (overflows box but maintains ratio), where object-position allows the object to be repositioned like background-image does.
+&lt;img src=&quot;http://www.w3.org/TR/css3-images/img_scale.png&quot; alt=&quot;How object-fit works&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;advance-skills&quot;&gt;Advance Skills&lt;/h4&gt;
+&lt;p&gt;Browser support: http://caniuse.com/#feat=object-fit&lt;br /&gt;
+From the previous support page, &lt;strong&gt;not all browsers&lt;/strong&gt; support this new CSS3 feature. So we need its polyfill to make it work in non-supported browser.&lt;br /&gt;
+There is one &lt;a href=&quot;https://github.com/anselmh/object-fit&quot;&gt;polyfill&lt;/a&gt; in github. And it’s simple to use, just download and include the CSS file &lt;em&gt;polyfill.object-fit.css&lt;/em&gt; and the JS file &lt;em&gt;polyfill.object-fit.min.js&lt;/em&gt;.
+But you still need to write the trigger JS file. The polyfill’s README just suggest to add the following js code:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;objectFit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;polyfill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;img&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// this can be any CSS selector&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;fittype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;cover&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// either contain, cover, fill or none&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;disableCrossDomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;true&#39;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// either &#39;true&#39; or &#39;false&#39; to not parse external CSS files.&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;But this doesn’t work on ie9. So I made my own triggger js adding the missing css style for the &lt;strong&gt;x-object-fit&lt;/strong&gt; tag.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;objectFit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;polyfill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;.hero-img img&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;fittype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;cover&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;disableCrossDomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;true&#39;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;x-object-fit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;width&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;100%&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;height&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;100%&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;overflow&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;hidden&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
 </description>
-        <pubDate>Sat, 26 Sep 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/clean/jekyll/update/2015/09/26/hello.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/clean/jekyll/update/2015/09/26/hello.html</guid>
+        <pubDate>Mon, 23 Mar 2015 00:00:00 +0800</pubDate>
+        <link>http://litongxin.github.io/2015/03/23/css3-property-object-fit-and-its-polyfill.html</link>
+        <guid isPermaLink="true">http://litongxin.github.io/2015/03/23/css3-property-object-fit-and-its-polyfill.html</guid>
         
         
-        <category>jekyll</category>
+      </item>
+    
+      <item>
+        <title>MongoDB, son of a biscuit</title>
+        <description>&lt;p&gt;Why I want to complain about MongoDB?&lt;/p&gt;
+
+&lt;h4 id=&quot;installation&quot;&gt;Installation&lt;/h4&gt;
+&lt;p&gt;If you think only run &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install mongodb&lt;/code&gt;, you are totally wrong.&lt;br /&gt;
+  The &lt;strong&gt;biscuit&lt;/strong&gt; thing is setting up dbpath for it. It took me almost 20 mins to make it work and start mongodb’s server!!!&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo mkdir -p /data/db  
+sudo chmod 0755 /data/db
+sudo chown &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;userName&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;:staff /data/db  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h4 id=&quot;log-tracker&quot;&gt;Log tracker&lt;/h4&gt;
+&lt;p&gt;Using mongojs for nodejs and mongodb integration, the mongojs module is easy to use for CRUD operations.&lt;br /&gt;
+  The &lt;strong&gt;biscuit&lt;/strong&gt; thing is that mongodb server log cheat me!!! When I insert one message for one collection first time, the logger print out. Then I insert some, it shows nothing. So I am trying to figure out why I can’t insert successfully. It tooks me 1 hour to check my code and google the reason.&lt;br /&gt;
+  Finally, I run &lt;code class=&quot;highlighter-rouge&quot;&gt;db.{collection_name}.findOne(key:value)&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;db.{collection_name}.find()&lt;/code&gt;, all message are saved without any logger!!! T.T&lt;/p&gt;
+
+&lt;h4 id=&quot;basic-usage&quot;&gt;Basic Usage&lt;/h4&gt;
+&lt;p&gt;Start mongdb server: &lt;code class=&quot;highlighter-rouge&quot;&gt;mongod&lt;/code&gt;&lt;br /&gt;
+Access mongdb using console: &lt;code class=&quot;highlighter-rouge&quot;&gt;mongo&lt;/code&gt;&lt;br /&gt;
+Get basic command: &lt;code class=&quot;highlighter-rouge&quot;&gt;help&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;intergrate-with-nodejs&quot;&gt;Intergrate with nodejs&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/mafintosh/mongojs&quot;&gt;MongoJS&lt;/a&gt; is a brilliant little Node.js package that lets you access MongoDB using an API that is extremely similar to MongoDB’s JavaScript shell.&lt;/p&gt;
+
+&lt;p&gt;Add mongojs dependency into package.json file, run &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install mongojs&lt;/code&gt;.&lt;br /&gt;
+Add mongdb configuration into app.js file like following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;var mongojs &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; require&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;mongojs&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+var databaseUrl &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;mydb&quot;&lt;/span&gt;;
+var collections &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;; // Collections is a &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;array&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; of collections our application uses
+var db &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; mongojs.connect&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;databaseUrl, collections&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;;
+db.runCommand&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mongo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;; //Trigger the mongdb server log to make sure connect successfully!!!&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then &lt;code class=&quot;highlighter-rouge&quot;&gt;db.users.find/save/update/delete&lt;/code&gt; to implement CURD Operations.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 13 Feb 2015 00:00:00 +0800</pubDate>
+        <link>http://litongxin.github.io/2015/02/13/mongodb-son-of-a-biscuit.html</link>
+        <guid isPermaLink="true">http://litongxin.github.io/2015/02/13/mongodb-son-of-a-biscuit.html</guid>
         
-        <category>update</category>
         
       </item>
     

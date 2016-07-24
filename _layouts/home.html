@@ -6,14 +6,21 @@
   <body>
 
     <div class="cover">
-      <div class="clock"></div>
-      <div class='hours'></div>
-      <div class='seconds'></div>
-      <div class='minutes'></div>
+      <div class="time-container">
+        <div class="clock"></div>
+        <div class='hours'></div>
+        <div class='seconds'></div>
+        <div class='minutes'></div>
+      </div>
       <div class="site-name">
         <div class="site-name__inner">
           <div class="name">{{ site.title }}</div>
           <div class="desc">{{site.description}}</div>
+          <ul class="social-media-list">
+            <li>
+              <a href="https://github.com/{{ site.github_username }}" class="link"><img src="/asset/images/icon-github.svg" class="icon icon-github"/></a>
+            </li>
+          </ul>
           <div class="btn">Blog</div>
         </div>
       </div>

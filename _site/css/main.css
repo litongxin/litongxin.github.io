@@ -284,11 +284,12 @@ code {
 .cover {
   color: #f1f1f1;
   height: 100%;
-  background: url("http://lakto.org/assets/img/cover.jpg") no-repeat center center fixed;
+  background: url("/asset/images/cover.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover; }
+  background-size: cover;
+  opacity: 0.75; }
 
 /**
  * clock css
@@ -352,6 +353,15 @@ code {
   font-size: 20px;
   font-family: 'Open Sans', sans-serif; }
 
+.site-name__inner .social-media-list {
+  margin: 20px 0;
+  list-style: none; }
+  .site-name__inner .social-media-list .link {
+    color: #f1f1f1; }
+    .site-name__inner .social-media-list .link .icon-github {
+      width: 20px;
+      height: 20px; }
+
 .site-name__inner .btn {
   padding: 10px 30px;
   border: 2px solid #fff;
@@ -360,6 +370,11 @@ code {
   border-radius: 3px;
   cursor: pointer; }
 
+@media (max-width: 1024px) {
+  .cover .time-container {
+    display: none; }
+  .cover .site-name {
+    text-align: center; } }
 /**
  * Syntax highlighting styles
  */
