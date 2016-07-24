@@ -298,7 +298,7 @@
     padding: 10px 30px;
     border: 2px solid #fff;
     display: inline-block;
-    margin-top: 100px;
+    margin-top: 40px;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -309,6 +309,7 @@
       display: none;
     }
     .site-name{
+      padding: 0;
       text-align: center;
     }
   }
