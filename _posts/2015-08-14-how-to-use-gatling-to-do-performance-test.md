@@ -39,8 +39,7 @@ The directory structure in my local machine as follows :
 
 -  Run `sbt update` to download dependencies plugins
 -  Put your com.myapplication package which contains demoSimulation.scala file to `/scala` directory.
-- Run `sbt test` to run gatling test and generate report into
-`/target/gatling` directory.
+-  Run `sbt test` to run gatling test and generate report into `/target/gatling` directory.
 
 Note: I change the concurrency number from 1 to 50 demoSimulation.scala file, here is the Screenshot for report.
 <img src="/asset/images/gatling-report.png" width="800px" alt="build.sbt"/>

@@ -56,7 +56,7 @@
 
 <h4 id="installation">Installation</h4>
 <p>If you think only run <code class="highlighter-rouge">brew install mongodb</code>, you are totally wrong.<br />
-  The <strong>biscuit</strong> thing is setting up dbpath for it. It took me almost 20 mins to make it work and start mongodb’s server!!!</p>
+The <strong>biscuit</strong> thing is setting up dbpath for it. It took me almost 20 mins to make it work and start mongodb’s server!!!</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo mkdir -p /data/db  
 sudo chmod 0755 /data/db
@@ -64,8 +64,8 @@ sudo chown <span class="o">{</span>userName<span class="o">}</span>:staff /data/
 
 <h4 id="log-tracker">Log tracker</h4>
 <p>Using mongojs for nodejs and mongodb integration, the mongojs module is easy to use for CRUD operations.<br />
-  The <strong>biscuit</strong> thing is that mongodb server log cheat me!!! When I insert one message for one collection first time, the logger print out. Then I insert some, it shows nothing. So I am trying to figure out why I can’t insert successfully. It tooks me 1 hour to check my code and google the reason.<br />
-  Finally, I run <code class="highlighter-rouge">db.{collection_name}.findOne(key:value)</code> and <code class="highlighter-rouge">db.{collection_name}.find()</code>, all message are saved without any logger!!! T.T</p>
+The <strong>biscuit</strong> thing is that mongodb server log cheat me!!! When I insert one message for one collection first time, the logger print out. Then I insert some, it shows nothing. So I am trying to figure out why I can’t insert successfully. It tooks me 1 hour to check my code and google the reason.<br />
+Finally, I run <code class="highlighter-rouge">db.{collection_name}.findOne(key:value)</code> and <code class="highlighter-rouge">db.{collection_name}.find()</code>, all message are saved without any logger!!! T.T</p>
 
 <h4 id="basic-usage">Basic Usage</h4>
 <p>Start mongdb server: <code class="highlighter-rouge">mongod</code><br />
