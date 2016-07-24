@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>MongoDB, son of a biscuit</title>
+  <meta name="description" content="Why I want to complain about MongoDB?">
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:600' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://litongxin.github.io/2015/02/13/mongodb-son-of-a-biscuit.html">
+  <link rel="alternate" type="application/rss+xml" title="Momo's Space" href="http://litongxin.github.io/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Momo's Space</a>
+
+    <nav class="site-nav">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">MongoDB, son of a biscuit</h1>
+    <p class="post-meta">Feb 13, 2015</p>
+  </header>
+
+  <article class="post-content">
+    <p>Why I want to complain about MongoDB?</p>
+
+<h4 id="installation">Installation</h4>
+<p>If you think only run <code class="highlighter-rouge">brew install mongodb</code>, you are totally wrong.<br />
+  The <strong>biscuit</strong> thing is setting up dbpath for it. It took me almost 20 mins to make it work and start mongodb’s server!!!</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo mkdir -p /data/db  
+sudo chmod 0755 /data/db
+sudo chown <span class="o">{</span>userName<span class="o">}</span>:staff /data/db  </code></pre></figure>
+
+<h4 id="log-tracker">Log tracker</h4>
+<p>Using mongojs for nodejs and mongodb integration, the mongojs module is easy to use for CRUD operations.<br />
+  The <strong>biscuit</strong> thing is that mongodb server log cheat me!!! When I insert one message for one collection first time, the logger print out. Then I insert some, it shows nothing. So I am trying to figure out why I can’t insert successfully. It tooks me 1 hour to check my code and google the reason.<br />
+  Finally, I run <code class="highlighter-rouge">db.{collection_name}.findOne(key:value)</code> and <code class="highlighter-rouge">db.{collection_name}.find()</code>, all message are saved without any logger!!! T.T</p>
+
+<h4 id="basic-usage">Basic Usage</h4>
+<p>Start mongdb server: <code class="highlighter-rouge">mongod</code><br />
+Access mongdb using console: <code class="highlighter-rouge">mongo</code><br />
+Get basic command: <code class="highlighter-rouge">help</code></p>
+
+<h4 id="intergrate-with-nodejs">Intergrate with nodejs</h4>
+<p><a href="https://github.com/mafintosh/mongojs">MongoJS</a> is a brilliant little Node.js package that lets you access MongoDB using an API that is extremely similar to MongoDB’s JavaScript shell.</p>
+
+<p>Add mongojs dependency into package.json file, run <code class="highlighter-rouge">npm install mongojs</code>.<br />
+Add mongdb configuration into app.js file like following:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">var mongojs <span class="o">=</span> require<span class="o">(</span><span class="s1">'mongojs'</span><span class="o">)</span>;
+var databaseUrl <span class="o">=</span> <span class="s2">"mydb"</span>;
+var collections <span class="o">=</span> <span class="o">[</span><span class="s2">"users"</span><span class="o">]</span>; // Collections is a <span class="nb">set</span> <span class="o">(</span>array<span class="o">)</span> of collections our application uses
+var db <span class="o">=</span> mongojs.connect<span class="o">(</span>databaseUrl, collections<span class="o">)</span>;
+db.runCommand<span class="o">(</span><span class="s2">"mongo"</span><span class="o">)</span>; //Trigger the mongdb server log to make sure connect successfully!!!</code></pre></figure>
+
+<p>Then <code class="highlighter-rouge">db.users.find/save/update/delete</code> to implement CURD Operations.</p>
+
+  </article>
+
+</div>
+
+    </div>
+
+  </body>
+
+</html>
