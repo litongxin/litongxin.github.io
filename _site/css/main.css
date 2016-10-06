@@ -369,6 +369,13 @@ code {
   border-radius: 3px;
   cursor: pointer; }
 
+.site-footer {
+  font-family: 'Source Sans Pro', sans-serif;
+  text-align: center;
+  color: #444; }
+  .site-footer p {
+    margin: 5px 0; }
+
 @media (max-width: 1024px) {
   body {
     font-size: 12px; }

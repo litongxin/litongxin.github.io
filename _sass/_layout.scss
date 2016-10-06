@@ -303,15 +303,24 @@
     cursor: pointer;
 }
 
+.site-footer {
+    font-family: 'Source Sans Pro', sans-serif;
+    text-align: center;
+    color: #444;
+    p {
+        margin: 5px 0;
+    }
+}
+
 @media (max-width: 1024px)  {
-  body{
+  body {
     font-size: 12px;
   }
-  .cover{
+  .cover {
     .time-container{
       display: none;
     }
-    .site-name{
+    .site-name {
       padding: 0;
       text-align: center;
     }
