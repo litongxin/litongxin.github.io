@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>This is how thoughtworker works</title>
+  <meta name="description" content="We all know ThoughtWorks are hiring the passionate people in consulting, coding and self-learning.">
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:600' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://litongxin.github.io/2016/10/06/this-is-how-thoughtworker-works.html">
+  <link rel="alternate" type="application/rss+xml" title="Momo's Space" href="http://litongxin.github.io/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Momo's Space</a>
+
+    <nav class="site-nav">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">This is how thoughtworker works</h1>
+    <p class="post-meta">Oct 6, 2016</p>
+  </header>
+
+  <article class="post-content">
+    <p>We all know ThoughtWorks are hiring the passionate people in consulting, coding and self-learning.</p>
+
+<p><span style="color:#0564be">So how thoughtworker works? </span></p>
+
+<p>Let me tell you a story of my team. 
+My current project is a UI-heavy application with fancy layout, lively animation and perfect user experience.</p>
+
+<p>One day, our designer gave us responsive mockup for one feature.</p>
+
+<p><span style="color:#0564be">Mobile:</span></p>
+
+<p>Selection area has two lines. The left type dropdown has fixed width, the right input box need to be self-adaptive which cover the rest of the space.
+Then one GO button follows.</p>
+
+<p><img src="/asset/images/design-for-mobile.png" width="240px" alt="Mobile Design" /></p>
+
+<p><span style="color:#0564be">Tablet:</span></p>
+
+<p>Selection area becomes one line, the left type dropdown and the right GO button has fixed width, the middle input box need to be self-adaptive.</p>
+
+<p><img src="/asset/images/design-for-tablet.png" width="400px" alt="Tablet Design" /></p>
+
+<p><span style="color:#0564be">Desktop:</span></p>
+
+<p>Similar with tablet, just consider the line has max-width.</p>
+
+<p><img src="/asset/images/design-for-desktop.png" width="700px" alt="Desktop Design" /></p>
+
+<p>Look pretty simple, right?</p>
+
+<p>In fact, it takes <strong>FOUR TIMES</strong> more time than everyone imagine.</p>
+
+<p>The first and regular solution that comes into mind is <code class="highlighter-rouge">position: absolute, left: $fixed-width, ...</code> 
+During code review, everyone think <em>position</em> is such a jack of all trades, should not use unless no other ways. So we decide to re-think.</p>
+
+<p>Pairing with sarah, she comes up with <code class="highlighter-rouge">display:table-cell, min-width: $fixed-width, max-width:$fixed-width, ...</code> 
+This solves the two column (one is fixed, the other is self-adaptive) requirement for mobile version. 
+But still kind of tricky, need to set <em>min-width and max-width</em> to limit width. Also very hard to implement the tablet/desktop version.
+So we overthrow current approach. Re-think again.</p>
+
+<p>I suggest to use common two column pattern with <code class="highlighter-rouge">float:left, float:right, margin-left: $fixed-width, ...</code> for mobile, 
+adding <code class="highlighter-rouge">margin-right:$fixed-width, margin-top: -$height</code> for tablet/desktop.</p>
+
+<p>Our premier photographer - Fang says: Why not using New layout mode - <em>flex</em> ? Quick win using <code class="highlighter-rouge">display:flex, align-content: space-around, ...</code> 
+Unfortunately, flex’s good friends <code class="highlighter-rouge">align-items: center, justify-content: center</code> is not that compatible with iPhone 4 and safari 7.</p>
+
+<p>In the end, using <code class="highlighter-rouge">float</code> is the final conclusion.</p>
+
+<p>When you read here, I double the following words, you know exactly what I am feeling and what thoughtworker does everyday.</p>
+
+<h4 id="what-i-learn-from-this">What I learn from this:</h4>
+<ul>
+  <li>Think twice when using regular way!</li>
+  <li>Treat every approach as good as it gets.</li>
+  <li>Never stop trying new things. 
+<small style="color: #0564be">Maybe its adaptability and compatibility is not that good. Still worth trying, at least learn something new.</small></li>
+</ul>
+
+
+  </article>
+</div>
+
+<footer class="site-footer">
+    <p>Copyright © 2016 litongxin from ThoughtWorks Inc.</p>
+    <p> Non-Commercial. No-Derivatives. Keep Signature.</p>
+</footer>
+    </div>
+
+  </body>
+
+</html>
