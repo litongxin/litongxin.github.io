@@ -6,17 +6,17 @@
 </description>
     <link>http://litongxin.github.io/</link>
     <atom:link href="http://litongxin.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 07 Oct 2016 00:56:35 +0800</pubDate>
-    <lastBuildDate>Fri, 07 Oct 2016 00:56:35 +0800</lastBuildDate>
+    <pubDate>Sat, 08 Oct 2016 21:05:49 +0800</pubDate>
+    <lastBuildDate>Sat, 08 Oct 2016 21:05:49 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
-        <title>This is how thoughtworker works</title>
+        <title>Feedback brings optimal approach</title>
         <description>&lt;p&gt;We all know ThoughtWorks are hiring the passionate people in consulting, coding and self-learning.&lt;/p&gt;
 
-&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;So how thoughtworker works? &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;So what makes thoughtworker work better? &lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;Let me tell you a story of my team. 
+&lt;p&gt;Let me tell you a story of my team.
 My current project is a UI-heavy application with fancy layout, lively animation and perfect user experience.&lt;/p&gt;
 
 &lt;p&gt;One day, our designer gave us responsive mockup for one feature.&lt;/p&gt;
@@ -44,18 +44,18 @@ Then one GO button follows.&lt;/p&gt;
 
 &lt;p&gt;In fact, it takes &lt;strong&gt;FOUR TIMES&lt;/strong&gt; more time than everyone imagine.&lt;/p&gt;
 
-&lt;p&gt;The first and regular solution that comes into mind is &lt;code class=&quot;highlighter-rouge&quot;&gt;position: absolute, left: $fixed-width, ...&lt;/code&gt; 
-During code review, everyone think &lt;em&gt;position&lt;/em&gt; is such a jack of all trades, should not use unless no other ways. So we decide to re-think.&lt;/p&gt;
+&lt;p&gt;The first and regular solution that comes into mind is &lt;code class=&quot;highlighter-rouge&quot;&gt;position: absolute, left: $fixed-width, ...&lt;/code&gt;
+During code review, everyone think &lt;em&gt;position&lt;/em&gt; is such a jack of all trades, should not use unless no other ways. So we decide to rethink.&lt;/p&gt;
 
-&lt;p&gt;Pairing with sarah, she comes up with &lt;code class=&quot;highlighter-rouge&quot;&gt;display:table-cell, min-width: $fixed-width, max-width:$fixed-width, ...&lt;/code&gt; 
-This solves the two column (one is fixed, the other is self-adaptive) requirement for mobile version. 
+&lt;p&gt;Pairing with sarah, she comes up with &lt;code class=&quot;highlighter-rouge&quot;&gt;display:table-cell, min-width: $fixed-width, max-width:$fixed-width, ...&lt;/code&gt;
+This solves the two column (one is fixed, the other is self-adaptive) requirement for mobile version.
 But still kind of tricky, need to set &lt;em&gt;min-width and max-width&lt;/em&gt; to limit width. Also very hard to implement the tablet/desktop version.
-So we overthrow current approach. Re-think again.&lt;/p&gt;
+So we overthrow current approach. Rethink again.&lt;/p&gt;
 
-&lt;p&gt;I suggest to use common two column pattern with &lt;code class=&quot;highlighter-rouge&quot;&gt;float:left, float:right, margin-left: $fixed-width, ...&lt;/code&gt; for mobile, 
+&lt;p&gt;I suggest to use common two column pattern with &lt;code class=&quot;highlighter-rouge&quot;&gt;float:left, float:right, margin-left: $fixed-width, ...&lt;/code&gt; for mobile,
 adding &lt;code class=&quot;highlighter-rouge&quot;&gt;margin-right:$fixed-width, margin-top: -$height&lt;/code&gt; for tablet/desktop.&lt;/p&gt;
 
-&lt;p&gt;Our premier photographer - Fang says: Why not using New layout mode - &lt;em&gt;flex&lt;/em&gt; ? Quick win using &lt;code class=&quot;highlighter-rouge&quot;&gt;display:flex, align-content: space-around, ...&lt;/code&gt; 
+&lt;p&gt;Our premier photographer - Fang says: Why not using New layout mode - &lt;em&gt;flex&lt;/em&gt; ? Quick win using &lt;code class=&quot;highlighter-rouge&quot;&gt;display:flex, align-content: space-around, ...&lt;/code&gt;
 Unfortunately, flex’s good friends &lt;code class=&quot;highlighter-rouge&quot;&gt;align-items: center, justify-content: center&lt;/code&gt; is not that compatible with iPhone 4 and safari 7.&lt;/p&gt;
 
 &lt;p&gt;In the end, using &lt;code class=&quot;highlighter-rouge&quot;&gt;float&lt;/code&gt; is the final conclusion.&lt;/p&gt;
@@ -64,16 +64,16 @@ Unfortunately, flex’s good friends &lt;code class=&quot;highlighter-rouge&quot
 
 &lt;h4 id=&quot;what-i-learn-from-this&quot;&gt;What I learn from this:&lt;/h4&gt;
 &lt;ul&gt;
-  &lt;li&gt;Think twice when using regular way!&lt;/li&gt;
+  &lt;li&gt;Listen other’s feedback and take action&lt;/li&gt;
   &lt;li&gt;Treat every approach as good as it gets.&lt;/li&gt;
-  &lt;li&gt;Never stop trying new things. 
+  &lt;li&gt;Think twice when using regular way!&lt;/li&gt;
+  &lt;li&gt;Never stop trying new things.
 &lt;small style=&quot;color: #0564be&quot;&gt;Maybe its adaptability and compatibility is not that good. Still worth trying, at least learn something new.&lt;/small&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
 </description>
         <pubDate>Thu, 06 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://litongxin.github.io/2016/10/06/this-is-how-thoughtworker-works.html</link>
-        <guid isPermaLink="true">http://litongxin.github.io/2016/10/06/this-is-how-thoughtworker-works.html</guid>
+        <link>http://litongxin.github.io/2016/10/06/feedback-brings-optimal-approach.html</link>
+        <guid isPermaLink="true">http://litongxin.github.io/2016/10/06/feedback-brings-optimal-approach.html</guid>
         
         
       </item>
