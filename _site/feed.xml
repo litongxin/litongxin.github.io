@@ -6,9 +6,45 @@
 </description>
     <link>http://litongxin.github.io/</link>
     <atom:link href="http://litongxin.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 08 Oct 2016 21:05:49 +0800</pubDate>
-    <lastBuildDate>Sat, 08 Oct 2016 21:05:49 +0800</lastBuildDate>
+    <pubDate>Sun, 09 Apr 2017 22:30:22 +0800</pubDate>
+    <lastBuildDate>Sun, 09 Apr 2017 22:30:22 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Learn the ABC of Business Analyst</title>
+        <description>&lt;p&gt;I have been the software developer for  nearly four years. In my first six or seven months, I work closely with the BA (shortcut for Business Analyst) to know the whole context for client project. Then I work without BA after the client re-structure. I almost forget what happens when your team has one BA role and have no idea what should BA do in daily work.&lt;/p&gt;
+
+&lt;p&gt;In my new project, I get the chance to work as the BA role for weeks. Then I start to compile my notes and try to give the newbee who wants to become a BA or want to learn the BA skills.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;Firstly&lt;/span&gt;, Let’s learn the definition of BA:&lt;/p&gt;
+
+&lt;p style=&quot;background-color:#E0E0E0&quot;&gt;Someone who &lt;span style=&quot;color:#0564be&quot;&gt;seek&lt;/span&gt; the business value, &lt;span style=&quot;color:#0564be&quot;&gt;understand&lt;/span&gt; the domain knot, &lt;span style=&quot;color:#0564be&quot;&gt;explore&lt;/span&gt; how to solve problems and &lt;span style=&quot;color:#0564be&quot;&gt;facilitate&lt;/span&gt; the growth of understanding among the team.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;Secondly&lt;/span&gt;, never too late to prepare, even if you has just been told you need to work as BA tomorrow. Have a try to search in BA community and read the related articles, like what does user stories mean, how to write Accpetance Criteria. At least you understand and know BA skills better.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;Then&lt;/span&gt;, ask the formal one who works with the client before, be familiar with client workstyle, preference and dislike.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;Next&lt;/span&gt;, have one well-organized user interview agenda before face-to-face meeting. Try to learn client jargons and know the specific shortcut meanings. Write down the agenda if possible. Adding self-introduction at the top of agenda if you are new here. In the beginning, let client know what is the propose for this interview or catch-up. Make sure you understand their needs and expectations, coz you need to transform stakeholder needs and expectations into customer requirements later for your team.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;Meanwhile&lt;/span&gt;, if you already understand the business value and process, in order to clarify everything for your team, having the question list is the best way to let everyone in the same page. You can even type the answers or output during the interview. This is not the waste of time, coz when typing the  words, client can correct you if anything is wrong.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color:#0564be&quot;&gt;Last one&lt;/span&gt;, draw diagrams according to different persona’s user journey, and this is quite straight forward. Use draw.io or axure.&lt;/p&gt;
+
+&lt;h4 id=&quot;if-you-still-find-very-hard-to-begin-you-can-start-with&quot;&gt;If you still find very hard to begin, you can start with:&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;Asking WHY questions&lt;/li&gt;
+  &lt;li&gt;Establish common language&lt;/li&gt;
+  &lt;li&gt;Be the “user”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Keep asking understandable questions and build connections among business, users and techies.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 09 Apr 2017 00:00:00 +0800</pubDate>
+        <link>http://litongxin.github.io/2017/04/09/learn-the-abc-of-business-analyst.html</link>
+        <guid isPermaLink="true">http://litongxin.github.io/2017/04/09/learn-the-abc-of-business-analyst.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Feedback brings optimal approach</title>
