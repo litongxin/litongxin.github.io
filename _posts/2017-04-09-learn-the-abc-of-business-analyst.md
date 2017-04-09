@@ -11,7 +11,7 @@ In my new project, I get the chance to work as the BA role for weeks. Then I sta
 
 <p style="background-color:#E0E0E0">Someone who <span style="color:#0564be">seek</span> the business value, <span style="color:#0564be">understand</span> the domain knot, <span style="color:#0564be">explore</span> how to solve problems and <span style="color:#0564be">facilitate</span> the growth of understanding among the team.</p>
 
-<span style="color:#0564be">Secondly</span>, never too late to prepare, even if you has just been told you need to work as BA tomorrow. Have a try to search in BA community and read the related articles, like what does user stories mean, how to write Accpetance Criteria. At least you understand and know BA skills better.
+<span style="color:#0564be">Secondly</span>, never too late to prepare, don't be afraid of trying new skill set, even if you has just been told you need to work as BA tomorrow. Have a try to search in BA community and read the related articles, like what does user stories mean, how to write Accpetance Criteria. At least you understand and know BA skills better.
 
 <span style="color:#0564be">Then</span>, ask the formal one who works with the client before, be familiar with client workstyle, preference and dislike.
 
@@ -19,7 +19,7 @@ In my new project, I get the chance to work as the BA role for weeks. Then I sta
 
 <span style="color:#0564be">Meanwhile</span>, if you already understand the business value and process, in order to clarify everything for your team, having the question list is the best way to let everyone in the same page. You can even type the answers or output during the interview. This is not the waste of time, coz when typing the  words, client can correct you if anything is wrong.
 
-<span style="color:#0564be">Last one</span>, draw diagrams according to different persona's user journey, and this is quite straight forward. Use draw.io or axure.
+<span style="color:#0564be">Last one</span>, draw diagrams according to different persona's user journey, and this is quite straight forward. This is also a good way to figure out the requirement map. By the way, tools like draw.io or axure are good choices.
 
 #### If you still find very hard to begin, you can start with:
 * Asking WHY questions
